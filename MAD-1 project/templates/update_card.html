@@ -1,0 +1,51 @@
+{% extends "base.html"%}
+{% block title %}Add Card{% endblock %}
+{% block content %}
+        <br>
+        {% if no_select_list==True %}
+          <div class="alert alert-warning" role="alert">
+              Please select a list!
+            </div>
+        {% elif notitle==True %}
+          <div class="alert alert-info" role="alert">
+              A Card title is required!
+            </div>
+        {% elif nodeadline==True %}
+          <div class="alert alert-info" role="alert">
+              A deadline is required!
+            </div>
+        {% else %}
+
+        {% endif %}
+        <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <form method="POST" id="card_form">
+                <select class="form-select form-select-lg mb-3" name="list_titles"style="width:400px" aria-label=".form-select-lg example">
+                    <option selected>Select List To Insert Card</option>
+                    {% for i in lists %}
+                    <option value="{{ i.list_id }}">{{ i.list_title }}</option>
+                    {% endfor %}
+                  </select>
+            <div class="mb-3" style="width:400px">
+                <label for="title" class="form-label">Title</label>
+                <input class="form-control form-control-lg" name="cardTitle" type="text" placeholder="Title" aria-label=".form-control-lg example">
+              </div>
+              <div class="mb-3" style="width:500px">
+                <label for="content" class="form-label">Content</label>
+                <textarea class="form-control" name="cardContent" id="content" rows="3" maxlength="50">Content</textarea>
+              </div>
+              <div class="mb-3" style="width:500px">
+                <label for="deadline" class="form-label">Deadline</label>
+                <input class="form-control form-control-lg" name="Deadline" type="date" placeholder="Deadline" aria-label=".form-control-lg example">
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input"  name="Complete" type="checkbox" role="switch" id="complete">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Mark as complete?</label>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="col-4"></div>
+        </div>
+{% endblock %}

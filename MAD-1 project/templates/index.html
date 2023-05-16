@@ -1,0 +1,93 @@
+{% extends "base.html"%}
+{% block title %}Kanban Lists{% endblock %}
+{% block content %}
+<br><br>
+{% if lists|length==0 %}
+<div class="row">
+  <div class="col-4"></div>
+<div class="col-4">
+  <span class="center" id="add_list">
+    <a href="/add_list/{{user}}">
+      <img src="/static/add-button.png" alt="add button">
+    </a>
+  </span>
+</div>
+<div></div>
+<br><br>
+</div>
+{% else %}
+<div class="col">
+<div class="row">
+{% for i in lists %}
+<div class="col">
+  <div class="card" style="width: 16rem;">
+      <img src="/static/blue.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onchange="location = this.value;">
+          <option selected><h5 class="card-title">{{i.list_title}}</h5></option>
+          <option value="/update_list/{{user}}/{{i.list_id}}">Edit</option>
+          <option value="/delete_list/{{user}}/{{i.list_id}}">Delete</option>
+        </select>
+        <p class="card-text">{{i.list_description}}</p>
+      </div>
+      <ul class="list-group list-group-flush col" style="list-style-type:none;">
+        {% if i.list_id in listcards %}
+        {% for j in listcards[i.list_id] %}
+        {% if j.card_done==None %}
+        <li class="list-group-item"><div class="card" style="width: 14rem;">
+          <img src="/static/green.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onchange="location = this.value;">
+              <option selected><h5 class="card-title">{{j.card_title}}</h5></option>
+              <option value="/update_card/{{user}}/{{j.card_id}}">Edit</option>
+              <option value="/delete_card/{{user}}/{{j.card_id}}">Delete</option>
+            </select>
+            <p class="card-text">{{j.card_content}}</p>
+          </div>
+        </li>
+        {% else %}
+        <li class="list-group-item"><div class="card special-card" style="width: 14rem;">
+          <img src="/static/green.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onchange="location = this.value;">
+              <option selected><h5 class="card-title">{{j.card_title}}</h5></option>
+              <option value="/update_card/{{user}}/{{j.card_id}}">Edit</option>
+              <option value="/delete_card/{{user}}/{{j.card_id}}">Delete</option>
+            </select>
+            <p class="card-text">{{j.card_content}}</p>
+          </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        <li>
+          <a href="/add_card/{{user}}/{{i.list_id}}">
+            <span id="add_card">
+            <img src="/static/blue-add-button.png" alt="add card button" style="width: 45px; height: 45px;" class="center">
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div></div>
+    <br><br><br>
+    {% endfor %}
+    <br><br>
+  </div>
+  <br><br>
+  <div class="row">
+    <div class="col-4"></div>
+  <div class="col-4">
+    <span class="center" id="add_list">
+      <a href="/add_list/{{user}}">
+        <img src="/static/add-button.png" alt="add button">
+      </a>
+    </span>
+  </div>
+  <div></div>
+  <br><br>
+  </div>
+</div>
+    {% endif %}
+    <br>
+    {% endblock %}
+

@@ -1,0 +1,29 @@
+{% extends "base.html"%}
+{% block title %}Add List{% endblock %}
+{% block content %}
+        <br>
+        {% if notitle==True %}
+          <div class="alert alert-info" role="alert">
+              A list title is required!
+            </div>
+        {% else %}
+
+        {% endif %}
+        <div class="row">
+            <div class="col-4"></div>
+        <div class="col-4">
+            <form method="POST" id="list_form">
+            <div class="mb-3" style="width:400px">
+                <label for="name" class="form-label">Title of List</label>
+                <input type="text" class="form-control" name="list-Title" placeholder="List Name">
+              </div>
+              <div class="mb-3" style="width:500px">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" name="list-Description" rows="3" maxlength="50"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="col-4"></div>
+        </div>
+{% endblock %}

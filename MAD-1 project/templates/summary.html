@@ -1,0 +1,44 @@
+{% extends "base.html"%}
+{% block title %}Kanban Lists{% endblock %}
+{% block content %}
+<br><br>
+{% if lists|length==0 %}
+<h1 class="center">NO LISTS!</h1>
+{% else %}
+<div class="col">
+<div class="row">
+{% for i in lists %}
+<div class="col">
+  <div class="card" style="width: 16rem;">
+      <img src="/static/blue.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onchange="location = this.value;">
+          <option selected><h5 class="card-title">{{i.list_title}}</h5></option>
+          <option value="/update_list/{{user}}/{{i.list_id}}">Edit</option>
+          <option value="/delete_list/{{user}}/{{i.list_id}}">Delete</option>
+        </select>
+        <p class="card-text">{{i.list_description}}</p>
+      </div>
+      
+          <img src="/static/graph_{{i.list_id}}_done.png" style="width: 250px; height: 125px;" alt="No graph exists">
+        
+          <img src="/static/graph_{{i.list_id}}_not_done.png" style="width: 250px; height: 125px;" alt="No graph exists">
+           
+          <br>
+          <div>
+            <h6 class="center">{{len_of_done_cards_in_list[i.list_id]}}/{{len_of_total_cards_in_list[i.list_id]}}: Complete</h6>
+          </div>
+          <br>
+          <div>
+            <h6 class="center">{{len_of_passed_deadline_cards_in_list[i.list_id]}}/{{len_of_total_cards_in_list[i.list_id]}}: Passed Deadline</h6>
+          </div>
+    </div></div>
+    <br><br><br>
+    {% endfor %}
+    <br><br>
+  </div>
+  <br><br>
+</div>
+    {% endif %}
+    <br>
+    {% endblock %}

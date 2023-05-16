@@ -1,0 +1,847 @@
+openapi: 3.0.0
+info:
+  title: Kanban App API documentation 21f1002039
+  description: >
+    
+    <h2>ER Diagram</h2>
+    <img src="https://mermaid.ink/img/pako:eNqNU8FugzAM_ZUo5_YHuK7H3dAuExLyiFeiEgcljqoK-PeFjE6lhGpcSN57sZ8te5CNVSgLie6k4ezAVCT-vg-PTozj8WgH8a49i0IYuKB_1CR80byBU1HTQl4xjqIMxoC7bUVzquEREEITixDhWqs1UbLTdP7lCAxm2R68v1q3ejo928pk7CK8lzFxrLnDfVqhb5zuWVvaCZ6paWVs7mLGWBPhPWOJ2zeW6MYSI_FacAJG0TiMvzqpVDzlJIlDUJ2mFzmUpf3XkcuE_3dbltHJdMYHs2nMHZ9T-5otQ_dKsDX-xGdL_7K2Q6Cki7vTtz4fIzNTkzxIg86AVnH7UlGV5BbjNMsiHhW4SyUrmnUQ2JY3amTBLuBBhn5u47KvsviGzke0B_q09n6ffgBwHBrD">
+    
+    <br><br>
+    <h3> User Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>user_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>user_name</td>
+        <td>String</td>
+        <td>Unique, Not Null</td>
+      </tr>
+      <tr>
+        <td>password</td>
+        <td>String</td>
+        <td>Unique, Not Null</td>
+      </tr>        
+    </tbody>
+    </table>
+    
+    <br><br>
+    <h3> List Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>list_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>list_title</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>list_description</td>
+        <td>String</td>
+        <td></td>
+      </tr>      
+      <tr>
+        <td>list_user_id</td>
+        <td>Integer</td>
+        <td>Foreign Key (User.user_id), Not Null</td>
+      </tr>         
+    </tbody>
+    </table>
+    
+    <br><br>
+    <h3> Card Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>card_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>card_title</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>card_content</td>
+        <td>String</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>card_create_date</td>
+        <td>DateTime</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>card_deadline</td>
+        <td>DateTime</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>card_done</td>
+        <td>String</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>card_done_date</td>
+        <td>DateTime</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>card_list_id</td>
+        <td>Integer</td>
+        <td>Foreign Key (List.list_id), Not Null</td>
+      </tr>         
+    </tbody>
+    </table>
+    
+    <br><br>
+    <h3> Summary Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>sum_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>sum_cards_total</td>
+        <td>Integer</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>sum_cards_done</td>
+        <td>Integer</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>sum_cards_deadline</td>
+        <td>Integer</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>sum_graphs</td>
+        <td>Boolean</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>sum_list_id</td>
+        <td>Integer</td>
+        <td>Foreign Key (List.list_id), Not Null</td>
+      </tr>         
+    </tbody>
+    </table>
+
+    <br><br>
+    <h2> Error Codes </h2> 
+    <h3> User Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>UVE1001</td>
+        <td>user doesn't exist</td>
+      </tr>
+      <tr>
+        <td>UVE1002</td>
+        <td>username is required</td>
+      </tr>
+      <tr>
+        <td>UVE1003</td>
+        <td>password is required</td>
+      </tr>
+      <tr>
+        <td>UVE1004</td>
+        <td>duplicate username</td>
+      </tr>
+    </tbody>
+    </table>
+    
+    <br>
+    <h3> List Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>LVE1001</td>
+        <td>list doesn't exist</td>
+      </tr>
+      <tr>
+        <td>LVE1002</td>
+        <td>list title is required</td>
+      </tr>
+      <tr>
+        <td>LVE1003</td>
+        <td>list user_id is required</td>
+      </tr>
+    </tbody>
+    </table>
+    
+    <br>
+    <h3> Card Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>CVE1001</td>
+        <td>card doesn't exist</td>
+      </tr>
+      <tr>
+        <td>CVE1002</td>
+        <td>card title is required</td>
+      </tr>
+      <tr>
+        <td>CVE1003</td>
+        <td>card deadline is required</td>
+      </tr>
+      <tr>
+        <td>CVE1004</td>
+        <td>card list_id is required</td>
+      </tr>
+    </tbody>
+    </table>
+    
+    <br>
+    <h3> Summary Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>SVE1001</td>
+        <td>summary doesn't exist</td>
+      </tr>
+    </tbody>
+    </table>
+
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000/
+tags:
+  - name: User
+    description: User operations
+  - name: List
+    description: List operations
+  - name: Card
+    description: Card operations
+  - name: Summary
+    description: Summary operations
+paths:
+  /api/user/{username}:
+    description: End point to get a user resource with user_name=username
+    get:
+      tags:
+          - User
+      description: Operation to get a user
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            example: Raj
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: user object
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  user_name:
+                    type: string
+                    example: Raj
+                  password:
+                    type: string
+                    example: sha256$lK6SpRLVyLJc9fR1$2143dadb23ab50385fdb6ab7da0198fc02d7db8fad130fec9d4e1f043a726c72
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/user:
+    description: End point to create a user
+    post:
+      tags:
+          - User
+      description: Operation to create a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_name:
+                  type: string
+                  example: Raj
+                password:
+                  type: string
+                  example: Anypass877
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 1
+                  user_name:
+                    type: string
+                    example: Raj
+                  password:
+                    type: string
+                    example: sha256$lK6SpRLVyLJc9fR1$2143dadb23ab50385fdb6ab7da0198fc02d7db8fad130fec9d4e1f043a726c72
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+                    
+  /api/list/{list_id}:
+    description: End point to get, update and delete a user resource with list_id=list_id
+    get:
+      tags:
+          - List
+      description: Operation to get a list
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: list object
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                    example: 1
+                  list_title:
+                    type: string
+                    example: Tasks
+                  list_description:
+                    type: string
+                    example: Tasks to accomplish
+                  list_user_id:
+                    type: integer
+                    example: 1
+        '500':
+          description: Internal server error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+    put:
+      tags:
+          - List
+      description: Operation to update the list
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                list_title:
+                  type: string
+                  example: Tasks
+                list_description:
+                  type: string
+                  example: Tasks to accomplish
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                    example: 1
+                  list_title:
+                    type: string
+                    example: Tasks
+                  list_description:
+                    type: string
+                    example: Tasks to accomplish
+                  list_user_id:
+                    type: integer
+                    example: 1
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      tags:
+          - List
+      description: Operation to delete a list
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Successfully Deleted
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/list:
+    description: End point to create a list resource
+    post:
+      tags:
+          - List
+      description: Operation to create a list
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                list_title:
+                  type: string
+                  example: Tasks
+                list_description:
+                  type: string
+                  example: Tasks to accomplish
+                list_user_id:
+                  type: integer
+                  example: 1
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: list object
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                    example: 1
+                  list_title:
+                    type: string
+                    example: Tasks
+                  list_description:
+                    type: string
+                    example: Tasks to accomplish
+                  list_user_id:
+                    type: integer
+                    example: 1
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/card/{card_id}:
+    description: End point to get, update and delete a card with card_id=card_id
+    get:
+      tags:
+          - Card
+      description: Operation to get a card
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 1
+                  card_title:
+                    type: string
+                    example: Task
+                  card_content:
+                    type: string
+                    example: Task content
+                  card_create_date:
+                    type: string
+                    example: 2022-09-11
+                  card_deadline:
+                    type: string
+                    example: 2022-09-12
+                  card_done:
+                    type: string
+                    example: on
+                  card_done_date:
+                    type: string
+                    example: 2022-09-12
+                  list_user_id:
+                    type: integer
+                    example: 1
+        '500':
+          description: Internal server error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+    put:
+      tags:
+          - Card
+      description: Operation to update the card
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                card_title:
+                  type: string
+                  example: New Task
+                card_content:
+                  type: string
+                  example: New Task content
+                card_deadline:
+                    type: string
+                    example: 2022-09-13
+                card_done:
+                  type: string
+                  example: on
+                card_list_id:
+                  type: integer
+                  example: 1
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 1
+                  card_title:
+                    type: string
+                    example: New Task
+                  card_content:
+                    type: string
+                    example: New Task content
+                  card_create_date:
+                    type: string
+                    example: 2022-09-11
+                  card_deadline:
+                    type: string
+                    example: 2022-09-13
+                  card_done:
+                    type: string
+                    example: on
+                  card_done_date:
+                    type: string
+                    example: 2022-09-13
+                  card_list_id:
+                    type: integer
+                    example: 1
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      tags:
+          - Card
+      description: Operation to delete a card
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Successfully Deleted
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/card:
+    description: End point to create a list resource
+    post:
+      tags:
+          - Card
+      description: Operation to create a card
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                card_title:
+                  type: string
+                  example: Task
+                card_content:
+                  type: string
+                  example: Task content
+                card_create_date:
+                  type: string
+                  example: 2022-09-11
+                card_deadline:
+                  type: string
+                  example: 2022-09-12
+                card_done:
+                  type: string
+                  example: on
+                card_done_date:
+                  type: string
+                  example: 2022-09-12
+                card_list_id:
+                  type: integer
+                  example: 1
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 1
+                  card_title:
+                    type: string
+                    example: Task
+                  card_content:
+                    type: string
+                    example: Task content
+                  card_create_date:
+                    type: string
+                    example: 2022-09-11
+                  card_deadline:
+                    type: string
+                    example: 2022-09-12
+                  card_done:
+                    type: string
+                    example: on
+                  card_done_date:
+                    type: string
+                    example: 2022-09-12
+                  card_list_id:
+                    type: integer
+                    example: 1
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+                    
+  /api/summary/{sum_id}:
+    description: End point to get a summary of a list with list_id=sum_list_id
+    get:
+      tags:
+          - Summary
+      description: Operation to get summary information of a list
+      parameters:
+        - in: path
+          name: sum_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: summary object
+                type: object
+                properties:
+                  sum_id:
+                    type: integer
+                    example: 1
+                  sum_cards_total:
+                    type: integer
+                    example: 4
+                  sum_cards_done:
+                    type: integer
+                    example: 2
+                  sum_cards_deadline:
+                    type: integer
+                    example: 3
+                  sum_graphs:
+                    type: boolean
+                    example: True
+                  sum_list_id:
+                    type: integer
+                    example: 1
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
